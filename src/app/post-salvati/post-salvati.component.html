@@ -1,0 +1,54 @@
+<div class="contianer">
+  <div class="row">
+    <div class="col-10">
+      <div class="row">
+        <div class="col-12 d-flex justify-content-around mb-5 mt-3">
+          <button (click)="sort()">Ordina A-Z</button>
+          <div>
+            <label class="me-3" for="search">Search</label>
+            <input (input)="searchEmail(this.query)" [(ngModel)]="query" type="text" id="search" placeholder="Search">
+          </div>
+          <button><a routerLink="home/post-salvati">Post Salvati</a></button>
+        </div>
+      </div>
+
+      <!--Card-->
+      <div class="card-body" *ngFor="let post of savedPosts let i = index">
+        <div class="row">
+          <div class="col-4 mx-auto mb-5 bg-light">
+            <div class="d-flex justify-content-between">
+              <small>Salva Post</small>
+              <i (click)="removePost(this.post.id)" class="bi bi-x"></i>
+            </div>
+            <small class="mb-5">{{post.email}}</small>
+            <h3 class="mb-3">{{post.name}}</h3>
+            <img class="w-100" src="./assets/images/Immagini-rilassanti-di-panorami-naturali-830x625.jpeg">
+            <p class="mb-3">{{post.body}}</p>
+            <div>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+              <div class="row">
+                <div class="col-12">
+                  <input [(ngModel)]="comment" class="p-5 mb-2" for="comment" type="text" placeholder="inserisci commento"/>
+                  <button class="mx-auto" (click)="addComment(i)">Aggiungi Commento</button>
+                </div>
+              </div>
+              <i class="bi bi-heart" *ngIf="this.post?.like == null || undefined" (click)="likePost(i)"></i>
+              <i class="bi bi-heart-fill" *ngIf="this.post.like" (click)="removeLike(i)"></i>
+            </div>
+            <ng-container *ngFor="let comment of this.savedPosts.comment let indexComment = index">
+              <div class="comment" *ngIf="comment">
+                <div class="d-flex justify-content-end">
+                  <i (click)="removeComment(this.post.id - 1, indexComment)" class="bi bi-x"></i>
+                </div>
+                <h4 *ngIf="comment">User1</h4>
+                <p>{{comment}}</p>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!--Fine Card-->
+    </div>
+  </div>
+</div>

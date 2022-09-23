@@ -1,0 +1,100 @@
+<div class="contianer">
+  <div class="row">
+    <div class="col-12 border-white">
+      <div class="row">
+        <div class="col-12 d-flex justify-content-around mb-5 pt-3 nav">
+          <button (click)="this._postService.sort()" class="m-3 btn btn-secondary">Ordina A-Z</button>
+          <div class="m-3" *ngIf="!this.isPostSaved">
+            <label class="me-3 text-white" for="search">Search</label>
+            <input (input)="this._postService.searchEmail(this.query)" [(ngModel)]="query" type="text" id="search" placeholder="Search">
+          </div>
+          <button (click)="getSavePost()" class="m-3 btn btn-secondary">Post Salvati</button>
+          <div class="btn btn-secondary" *ngIf="this.isPostSaved">
+            <button class="btn btn-secondary" (click)="refreshPage()">Home</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!--Card-->
+      <div class="container" *ngFor="let post of this._postService.posts let i = index">
+        <div class="row" *ngIf="!this.isPostSaved">
+          <div id="card" class="({{isRemoved? 'slide-out-fwd-center' : ''}}) col-5 mx-auto mb-5 bg-light card">
+            <div class="d-flex justify-content-between mt-2">
+              <small class="text-white" (click)="_postService.savePost(i)">Salva Post</small>
+              <i (click)="putAnimation(); this._postService.removePost(post.id);" class="bi bi-x"></i>
+            </div>
+            <small class="mb-3 text-white">{{post.email}}</small>
+            <h3 class="mb-3 text-white">{{post.name}}</h3>
+            <img class="w-100" src="./assets/images/Immagini-rilassanti-di-panorami-naturali-830x625.jpeg">
+            <p class="mb-3 text-white">{{post.body}}</p>
+            <div>
+            </div>
+            <div class="mb-1">
+              <div class="row">
+                <div class="col-12 d-flex justify-content-around">
+                  <textarea [(ngModel)]="this._postService.comment" class="mb-2 me-3" for="comment" type="text"
+                            placeholder="inserisci commento"></textarea>
+                  <button class="btn btn-secondary mx-auto" (click)="this._postService.addComment(i)">Aggiungi Commento</button>
+                </div>
+              </div>
+              <i class="wobble-hor-bottom bi bi-heart" *ngIf="this.post?.like == null || undefined" (click)="this._postService.likePost(i)"></i>
+              <i class="wobble-hor-bottom bi bi-heart-fill" *ngIf="this.post.like" (click)="this._postService.removeLike(i)"></i>
+            </div>
+            <ng-container *ngFor="let comment of this.post.comment let indexComment = index">
+              <div class="comment" *ngIf="comment">
+                <div class="d-flex justify-content-end">
+                  <i (click)="this._postService.removeComment(this.post.id - 1, indexComment)" class="bi bi-x me-2"></i>
+                </div>
+                <h4 *ngIf="comment">User1</h4>
+                <p>{{comment}}</p>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!--Fine Card-->
+
+      <!--Saved Post-->
+      <div class="card-body" *ngFor="let post of savedPost let i = index">
+        <div class="row" *ngIf="this.isPostSaved">
+          <div class="col-4 mx-auto mb-5 bg-light">
+            <div class="d-flex justify-content-between">
+              <small>Salva Post</small>
+              <i (click)="removePostSave(this.post.id)" class="bi bi-x"></i>
+            </div>
+            <small class="mb-5">{{post.email}}</small>
+            <h3 class="mb-3">{{post.name}}</h3>
+            <img class="w-100" src="./assets/images/Immagini-rilassanti-di-panorami-naturali-830x625.jpeg">
+            <p class="mb-3">{{post.body}}</p>
+            <div>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+              <div class="row">
+                <div class="col-12">
+                  <input [(ngModel)]="comment" class="p-5 mb-2" for="comment" type="text" placeholder="inserisci commento"/>
+                  <button class="mx-auto" (click)="addCommentSave(this.post.id)">Aggiungi Commento</button>
+                </div>
+              </div>
+              <i class="bi bi-heart" *ngIf="this.post?.like == null || undefined" (click)="likePostSave(i)"></i>
+              <i class="bi bi-heart-fill" *ngIf="this.post.like" (click)="removeLikeSave(i)"></i>
+            </div>
+            <ng-container *ngFor="let commentSave of this.post.comment let indexComment = index">
+              <div class="comment">
+                <div class="d-flex justify-content-end">
+                  <i (click)="removeCommentSave(this.post.id - 1, indexComment)" class="bi bi-x"></i>
+                </div>
+                <h4 *ngIf="commentSave">User1</h4>
+                <p>{{commentSave}}</p>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!--Saved Post Fine-->
+      <div *ngIf="this.savedPost.length == 0" class="d-flex align-items-center justify-content-center h-100">
+        <h1>Nessun Post Salvato</h1>
+      </div>
+    </div>
+  </div>
+</div>
